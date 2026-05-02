@@ -10,32 +10,34 @@ namespace LoginForm.Services
 {
     public class UserManager
     {
-        private string _username;
-        private string _passwordHash;
+        Dictionary<string, string> users = new Dictionary<string, string>();
+
+        //private string _username;
+        //private string _passwordHash;
         
         public bool Register(string username, string password)
         {
-            _username = username;
-            _passwordHash = HashPassword(password);
+            if (users.ContainsKey(username))
+            {
+                return false;
+            }
+                        
+            string passwordHash = HashPassword(password);
+            users.Add(username, passwordHash);
             return true;
             
         }
 
         public bool TryLogin(Registration credentials)
         {
-            if (!credentials.Username.Equals(_username, StringComparison.OrdinalIgnoreCase))
+            if (!users.ContainsKey(credentials.Username))
             {
                 return false;
             }
 
             string hash = HashPassword(credentials.Password);
 
-            if (!hash.Equals(_passwordHash))
-            {
-                return false;
-            }
-
-            return true;
+            return users[credentials.Username] == hash;
         }
 
         private string HashPassword(string password)
