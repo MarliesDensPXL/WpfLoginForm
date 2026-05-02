@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginForm"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Login" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <Grid>
+        <Label Content="Meld je aan" HorizontalAlignment="Center" Margin="0,21,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="20" FontWeight="Bold"/>
+        <Label Content="Gebruikersnaam:" HorizontalAlignment="Left" Margin="47,73,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="usernameTextBox" HorizontalAlignment="Left" Margin="200,81,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" GotFocus="OnFocus" TextChanged="OnTextChanged"/>
+        <Label Content="Wachtwoord:" HorizontalAlignment="Left" Margin="47,0,0,0" VerticalAlignment="Center"/>
+        <PasswordBox x:Name="passwordPasswordBox" HorizontalAlignment="Left" Margin="200,117,0,0" VerticalAlignment="Top" Width="120" GotFocus="OnPasswordFocus" PasswordChanged="OnPasswordChanged"/>
+        <Button x:Name="loginButton" Content="Login" HorizontalAlignment="Left" Margin="277,158,0,0" VerticalAlignment="Top" Click="LoginClick"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="330,158,0,0" VerticalAlignment="Top" Click="cancelButton_Click"/>
+        <TextBlock x:Name="statusTextBlock" HorizontalAlignment="Left" Margin="47,158,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="170" Height="58"/>
+        <Button x:Name="resetButton" Content="Reset" HorizontalAlignment="Left" Margin="277,187,0,0" VerticalAlignment="Top" Visibility="Hidden" Click="ResetButton_Click"/>
+        <Button x:Name="registerButton" Content="Registreer" HorizontalAlignment="Left" Margin="299,18,0,0" VerticalAlignment="Top" Background="Red" Click="RegisterButton_Click"/>
 
     </Grid>
 </Window>
