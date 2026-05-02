@@ -11,8 +11,8 @@
     <Grid>
         <Label Content="Meld je aan" HorizontalAlignment="Center" Margin="0,21,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="20" FontWeight="Bold"/>
         <Label Content="Gebruikersnaam:" HorizontalAlignment="Left" Margin="47,73,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="usernameTextBox" HorizontalAlignment="Left" Margin="200,81,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" GotFocus="OnFocus" TextChanged="OnTextChanged"/>
-        <Label Content="Wachtwoord:" HorizontalAlignment="Left" Margin="47,0,0,0" VerticalAlignment="Center"/>
+        <TextBox x:Name="usernameTextBox" HorizontalAlignment="Left" Margin="200,81,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" GotFocus="OnUsernameFocus" TextChanged="OnTextChanged"/>
+        <Label Content="Wachtwoord:" HorizontalAlignment="Left" Margin="47,113,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="passwordPasswordBox" HorizontalAlignment="Left" Margin="200,117,0,0" VerticalAlignment="Top" Width="120" GotFocus="OnPasswordFocus" PasswordChanged="OnPasswordChanged"/>
         <Button x:Name="loginButton" Content="Login" HorizontalAlignment="Left" Margin="277,158,0,0" VerticalAlignment="Top" Click="LoginClick"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="330,158,0,0" VerticalAlignment="Top" Click="cancelButton_Click"/>

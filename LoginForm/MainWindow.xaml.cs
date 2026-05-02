@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,15 +22,15 @@ namespace LoginForm
     {
         int roundsLeft = 3;
         UserManager manager;
-        Dictionary<string, string> users = new Dictionary<string, string>();
+        bool suppressFocusText = false;
+
 
         public MainWindow()
         {
             InitializeComponent();
             manager = new UserManager();
-            manager.Register("Marlies", "test"); //simulatie registratie eerste gebruiker
-            usernameTextBox.Focus();
-            
+            // manager.Register("Marlies", "test"); //simulatie registratie eerste gebruiker
+            usernameTextBox.Focus();            
         }
 
         private void LoginClick(object sender, RoutedEventArgs e)
@@ -38,34 +39,32 @@ namespace LoginForm
             if (manager.TryLogin(credentials))
             {
                 statusTextBlock.Foreground = Brushes.Green;
-                statusTextBlock.Text = "Login geslaagd!";
+                statusTextBlock.Text = "Login geslaagd!";             
                 
             }
             else
             {
                 roundsLeft--;
-                
-                statusTextBlock.Foreground = Brushes.Red;
-                statusTextBlock.Text = (roundsLeft == 1) ? $"Ongeldige gebruikersnaam of wachtwoord (nog {roundsLeft} poging te gaan)." :
-                $"Ongeldige gebruikersnaam of wachtwoord (nog {roundsLeft} pogingen te gaan).";
-                usernameTextBox.Clear();
-                passwordPasswordBox.Clear();
-                //usernameTextBox.Focus();
+                ShowInfo((roundsLeft == 1) ? $"Ongeldige gebruikersnaam of wachtwoord (nog {roundsLeft} poging te gaan)." :
+                $"Ongeldige gebruikersnaam of wachtwoord (nog {roundsLeft} pogingen te gaan).", Brushes.Red);
+
+                ClearScreen();                
 
                 if (roundsLeft == 0)
                 {
                     loginButton.IsEnabled = false;
                     resetButton.Visibility = Visibility.Visible;
                 }
-            }                       
-                        
+            }                     
         }        
 
-        private void OnFocus(object sender, RoutedEventArgs e)
+        private void OnUsernameFocus(object sender, RoutedEventArgs e)
         {
+            if (suppressFocusText)
+                return;
+            
             if (string.IsNullOrEmpty(usernameTextBox.Text))
-            statusTextBlock.Foreground = Brushes.Gray;
-            statusTextBlock.Text = "Geef je gebruikersnaam";
+                ShowInfo("Geef je gebruikersnaam", Brushes.Gray);            
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -78,10 +77,11 @@ namespace LoginForm
 
         private void OnPasswordFocus(object sender, RoutedEventArgs e)
         {
+            if (suppressFocusText)
+                return;
+
             if (string.IsNullOrEmpty(usernameTextBox.Text))
-                ShowInfo("Geef je wachtwoord", Brushes.Gray);
-                //statusTextBlock.Foreground = Brushes.Gray;
-            //statusTextBlock.Text = "Geef je wachtwoord";
+                ShowInfo("Geef je wachtwoord", Brushes.Gray);                
         }        
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
@@ -94,12 +94,9 @@ namespace LoginForm
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            roundsLeft = 3;
-            usernameTextBox.Clear();
-            passwordPasswordBox.Clear();
+            ClearScreen(true);
             loginButton.IsEnabled = true;
-            resetButton.Visibility = Visibility.Hidden;
-            usernameTextBox.Focus();
+            resetButton.Visibility = Visibility.Hidden;            
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -114,18 +111,37 @@ namespace LoginForm
                 ShowInfo("Vul een gebruikersnaam én een wachtwoord in!", Brushes.Red);
             }
 
-            if (users.ContainsKey(usernameTextBox.Text))
+            bool isValidRegistration = manager.Register(usernameTextBox.Text, passwordPasswordBox.Password);
+            if (!isValidRegistration)
             {
-                ShowInfo("Deze gebruikersnaam bestaat al", Brushes.Red);
+                ShowInfo("Gebruikersnaam bestaat al.", Brushes.Red);                
             }
-
-            users.Add(usernameTextBox.Text, passwordPasswordBox.Password);
+            else
+            {
+                ShowInfo("Registratie geslaagd!", Brushes.Green);
+                ClearScreen();                
+            }
         }
 
         private void ShowInfo(string text, Brush color)
         {
             statusTextBlock.Text = text;
             statusTextBlock.Foreground = color;
+        }
+
+        private void ClearScreen(bool ResetCounter = false)
+        {
+            suppressFocusText = true;
+            
+            usernameTextBox.Clear();
+            passwordPasswordBox.Clear();
+            if (ResetCounter)
+            {
+                roundsLeft = 3;
+            }
+            usernameTextBox.Focus();
+
+            suppressFocusText = false;
         }
     }
 }
